@@ -15,9 +15,14 @@ router.get("/readuser", async (req, res) => {
 
 
 // Adding new Todo in Database
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 router.post("/adduser", async (req, res) => {
     let user = req.body;
+
+    if (!emailRegex.test(user.email)) {
+        return res.status(400).json({ error: "Invalid email address" });
+    }
     const newUser = new UserModel(user);
     try {
         await newUser.save();
